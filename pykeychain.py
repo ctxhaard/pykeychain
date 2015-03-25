@@ -1,6 +1,4 @@
-# ------------------------
-# Carlo Tomasin 25.02.2015
-# ------------------------
+#!/usr/bin/env python3 
 
 # TODO: richiedere la password
 # se il file è stato decrittato con successo
@@ -15,10 +13,13 @@
 
 """
 This module is a simple custom keychain manager
+Test Password is:"test_password"
 """
 
+import os
+
 def decryptDb(fileName,password):
-    file = os.popen('openssl enc -d -aes-256-cbc -in %s -k ,%s' % (fileName,password))
+    file = os.popen('openssl enc -d -aes-256-cbc -in %s -k %s' % (fileName,password))
     return file
 
 def load_accounts(file):
@@ -52,10 +53,13 @@ def save_accounts(accounts,file):
         else:
            file.write('%s\n' % ('-'*3))    
 
+# Per avere un qualcosa su cui salvare...
+# enc -aes-256-cbc -salt -k $password -out $fileName
+
 def main():
     password = input('Insert your password: ')
-    dbData = decryptDb('../accounts.txt.protected',password)
-
+    print(list(load_accounts(decryptDb('archive.protected',password))))
+#    print(dbData);
 
 if __name__ == '__main__':
     main()
