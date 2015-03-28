@@ -6,6 +6,7 @@ Created on 29/mar/2015
 import os
 import shutil
 from datetime import datetime
+import sys
 
 class Account:
     def __init__(self,t=None,url=None,u=None,p=None,n=None,**others):
@@ -39,6 +40,10 @@ n: %s
         if None != self.others:
             result = result + '\nOthers: %s' % self.others
         return result
+
+    def matches(self,keyword):
+        # TODO implementare
+        return True
     
 def open_decrypt(file_name,password):
     """
@@ -60,9 +65,10 @@ def load_accounts(file):
     Returns a generator object giving dictionaries with records
     """
     content = {}
-
     # record: (url , www.cacca.it)
-    for record in (line.split(':') for line in file):
+    for line in file:
+        # print(type(line)) => <class 'str'>
+        record = line.split(':')
         if len(record) == 0: continue
         # record: (url,www.cacca.it)
         record = list(map(str.strip,record))
@@ -95,4 +101,14 @@ def bkp_filename(file_name):
     result = file_name + '_' + strDate + '.bkp'
     return result
 
-    
+def indexes_of_accounts_matching(accounts,keyword):
+    """
+    Returns a list of accounts having keyword in one of its attributes
+    """
+    result = []
+    for (index,account) in enumerate(accounts):
+        if account.matches(keyword): result.append(index)
+    return result
+
+
+

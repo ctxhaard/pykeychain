@@ -39,10 +39,15 @@ def edit_account(account):
             break
     return result # in teoria non dovrebbe mai arrivare qui
 
-def print_accounts(accounts):
+def print_accounts(accounts,filter=None):
+    """
+    Prints a list of account titles filtere using a list of indexes.
+    If filer is None all account titles are printed
+    """
     print(SEP)
     for (i,account) in enumerate(accounts):
-        print(i+1,account.title)
+        if filter == None or i in filter:
+            print(i+1,account.title)
     print(SEP)
     
 def print_account(account):
