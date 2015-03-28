@@ -69,9 +69,20 @@ def main():
     password = input('Insert your password: ')
     in_file= open_decrypt('archive.protected',password)
     accounts = list(load_accounts(in_file))
-    print(accounts)
-    out_file = open_encrypt('archive.protected2',password)
-    save_accounts(accounts,out_file)
+    for (i,v) in enumerate(accounts):
+        if 'n' in v: print(i,v['n'])
+    choice = input('Select an account by index or by keyword: ')
+    try:
+        iChoice = int(choice)
+    except:
+        iChoice = -1
+    finally:
+        print('you selected: ',iChoice)
+        if iChoice >= 0:
+            print(accounts[iChoice])
+#    print(accounts)
+#    out_file = open_encrypt('archive.protected2',password)
+#    save_accounts(accounts,out_file)
 #    print(list(accounts))
 #    print(dbData);
 
