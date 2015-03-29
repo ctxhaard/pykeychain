@@ -1,16 +1,30 @@
-n:BlahBlahCar:uffa
-u:c.tomasin@gmail.com
-p: cribbio!
-url:www.blahblahcar.com
-note: prova prova prova
 ---
-n:CozzaCozza
-u:cozza.cozza@texa.it
-p: perDian4!?!
-url:www.texa.it
-note: prova texa prova
+t: AppleID
+u: c.tomasin@gmail.com
+p: password1
 ---
-n:Ciccio Calippo
-u:ciccio.calippo@tin.com
-p: UrkaLokka
-url:m.ciccio.calippo.co.uk
+t:Allie
+u:username2
+p:password2
+n: OBDII di Allianz
+	IMEI dispositivo: 3564960042021790
+	S/N: BH7612143119
+	Key: 4902
+---
+t:Genertel (MyGenertel)
+u:username3
+p:password3
+url:www.genertel.it
+n:Codice Personale:3061796
+	Chiave di Accesso:96756
+---
+t:Linear
+u:username4
+p:password4
+url:www.linear.it
+---
+t:Preventivatore
+u:username5
+p:password5
+---
+

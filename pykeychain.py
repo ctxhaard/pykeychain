@@ -1,4 +1,5 @@
 #!/usr/bin/env python3 
+# -*- coding: utf-8 -*
 
 # TODO: richiedere la password
 # se il file è stato decrittato con successo
@@ -17,6 +18,7 @@ Test Password is:"test_password"
 """
 
 import os
+from account import load_accounts, save_accounts, Account
 
 def open_decrypt(file_name,password):
     """
@@ -32,45 +34,14 @@ def open_encrypt(file_name,password):
     file = os.popen('openssl enc -aes-256-cbc -salt -out %s -k %s' % (file_name,password),'w')
     return file
 
-def load_accounts(file):
-    """
-    Reads accounts from file
-    Returns a generator object giving dictionaries with records
-    """
-    account = {}
-
-    for record in (line.split(':') for line in file):
-        if len(record) == 0: continue
-        record = list(map(str.strip,record))
-        if len(record[0]) == 0:
-            continue
-        elif record[0][:1] == '-':
-            if(len(record)):
-                yield account
-                account = {}
-        elif len(record) >= 2:
-            key, *value = record
-            account[key] = ':'.join(value)
-    yield account
-
-def save_accounts(accounts,file):
-    """
-    Saves accounts to file
-    """
-    for account in accounts:
-        for key in account:
-            file.write('%s:%s\n' % (key,account[key]))
-        else:
-           file.write('%s\n' % ('-'*3))
-    file.close()
 
 # Per avere un qualcosa su cui salvare...
 def main():
     password = input('Insert your password: ')
     in_file= open_decrypt('archive.protected',password)
     accounts = list(load_accounts(in_file))
-    for (i,v) in enumerate(accounts):
-        if 'n' in v: print(i,v['n'])
+    for (i,account) in enumerate(accounts):
+        print(i,account.title)
     choice = input('Select an account by index or by keyword: ')
     try:
         iChoice = int(choice)
