@@ -18,7 +18,7 @@ Test Password is:"test_password"
 """
 
 import os
-from account import load_accounts, save_accounts, Account
+from account import load_accounts
 
 def open_decrypt(file_name,password):
     """
@@ -41,16 +41,23 @@ def main():
     in_file= open_decrypt('archive.protected',password)
     accounts = list(load_accounts(in_file))
     for (i,account) in enumerate(accounts):
-        print(i,account.title)
-    choice = input('Select an account by index or by keyword: ')
-    try:
-        iChoice = int(choice)
-    except:
-        iChoice = -1
-    finally:
-        print('you selected: ',iChoice)
-        if iChoice >= 0:
-            print(accounts[iChoice])
+        print(i+1,account.title)
+    choice = input('Select an account by index (0 for add new): ')
+    while choice < 0:
+        try:
+            iChoice = int(choice)
+        except:
+            iChoice = -1
+        finally:
+            print('you selected: ',iChoice)
+            if 0 == iChoice:
+                # TODO: aggiungere interfaccia di inserimento nuovo
+                pass
+            elif iChoice > 0:
+                print(str(accounts[iChoice-1]))
+                # TODO: aggiungere possibilità di modificare il record
+            else:
+                print("'",choice,"' is not a valid option")
 #    print(accounts)
 #    out_file = open_encrypt('archive.protected2',password)
 #    save_accounts(accounts,out_file)

@@ -5,21 +5,38 @@ Created on 29/mar/2015
 '''
 
 class Account:
-    def __init__(self,t=None,url=None,u=None,p=None,n=None,**other):
+    def __init__(self,t=None,url=None,u=None,p=None,n=None,**others):
         self.title = t
         self.URL = url
         self.username = u
         self.password = p
         self.note = n
+        self.others = others
         pass
     
     def __repr__(self):
-        return """Title: %s
-        \tURL: %s
-        \tUsername: %s
-        \tPassword: %s
-        \tNote: %s""" % (self.title,self.URL,self.username,self.password,self.note)
+        result = """---
+t: %s
+url: %s
+u: %s
+p: %s
+n: %s
+""" % (self.title,self.URL,self.username,self.password,self.note)
+        if None != self.others:
+            rows = [': '.join((key,self.others[key])) for key in self.others]
+            result += '\n'.join(rows)
+        return result
+        
     
+    def __str__(self):
+        result = """Title: %s
+\tURL: %s
+\tUsername: %s
+\tPassword: %s
+\tNote: %s""" % (self.title,self.URL,self.username,self.password,self.note)
+        if None != self.others:
+            result = result + '\n\tOther: %s' % self.others
+        return result
     
 def load_accounts(file):
     """
@@ -50,8 +67,5 @@ def save_accounts(accounts,file):
     Saves accounts to file
     """
     for account in accounts:
-        for key in account.keys:
-            file.write('%s:%s\n' % (key,account[key]))
-        else:
-            file.write('%s\n' % ('-'*3))
+        file.write(repr(account))
     file.close()
