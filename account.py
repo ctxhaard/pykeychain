@@ -11,8 +11,7 @@ class Account:
         self.username = u
         self.password = p
         self.note = n
-        self.others = others
-        pass
+        self.others = ((others.keys() and others) or None)
     
     def __repr__(self):
         result = """---
@@ -30,12 +29,12 @@ n: %s
     
     def __str__(self):
         result = """Title: %s
-\tURL: %s
-\tUsername: %s
-\tPassword: %s
-\tNote: %s""" % (self.title,self.URL,self.username,self.password,self.note)
+URL: %s
+Username: %s
+Password: %s
+Note: %s""" % (self.title,self.URL,self.username,self.password,self.note)
         if None != self.others:
-            result = result + '\n\tOther: %s' % self.others
+            result = result + '\nOthers: %s' % self.others
         return result
     
 def load_accounts(file):
@@ -53,7 +52,7 @@ def load_accounts(file):
         if len(record[0]) == 0:
             continue
         elif record[0][:1] == '-':
-            if(len(record)):
+            if(len(content.keys())):
                 yield Account(**content)
                 content = {}
         elif len(record) >= 2:
@@ -67,5 +66,6 @@ def save_accounts(accounts,file):
     Saves accounts to file
     """
     for account in accounts:
+        # print(account.title)
         file.write(repr(account))
     file.close()

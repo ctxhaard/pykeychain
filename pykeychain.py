@@ -18,7 +18,9 @@ Test Password is:"test_password"
 """
 
 import os
-from account import load_accounts
+from account import load_accounts, save_accounts, Account
+from copy import copy
+from getpass import getpass
 
 def open_decrypt(file_name,password):
     """
@@ -34,33 +36,72 @@ def open_encrypt(file_name,password):
     file = os.popen('openssl enc -aes-256-cbc -salt -out %s -k %s' % (file_name,password),'w')
     return file
 
+def edit_account(account):
+    result = False
+    print(1,'Title:',account.title)
+    print(2,'URL:',account.URL)
+    print(3,'Username:',account.username)
+    print(4,'Password:',account.password)
+    while True:
+        choice = input("Select index ('s:save C:cancel'): ")
+        if choice == '1':
+            account.title = input('Title: ')
+            result = True
+        elif choice == '2':
+            account.URL = input('URL: ')
+            result = True
+        elif choice == '3':
+            account.username = input('Username: ')
+            result = True
+        elif choice == '4':
+            account.password = getpass('Password: ')
+            result = True
+        elif choice == 's':
+            break
+        else:
+            result = False
+            break
+    return result # in teoria non do
 
 # Per avere un qualcosa su cui salvare...
 def main():
-    password = input('Insert your password: ')
-    in_file= open_decrypt('archive.protected',password)
+    file_name = 'archive.protected'
+    password = getpass('Insert your password: ')
+    in_file= open_decrypt(file_name,password)
     accounts = list(load_accounts(in_file))
     for (i,account) in enumerate(accounts):
         print(i+1,account.title)
-    choice = input('Select an account by index (0 for add new): ')
-    while choice < 0:
+    while True:
+        choice = input('Select an account by index (0 for add new): ')
         try:
             iChoice = int(choice)
+            print('You selected: ',iChoice)
         except:
             iChoice = -1
-        finally:
-            print('you selected: ',iChoice)
-            if 0 == iChoice:
-                # TODO: aggiungere interfaccia di inserimento nuovo
-                pass
-            elif iChoice > 0:
-                print(str(accounts[iChoice-1]))
-                # TODO: aggiungere possibilità di modificare il record
-            else:
-                print("'",choice,"' is not a valid option")
+            print('You choosed to quit')
+            
+        if 0 == iChoice:
+            newAccount = Account()
+            if edit_account(newAccount):
+                accounts.append(newAccount)    
+                out_file = open_encrypt(file_name,password)
+                save_accounts(accounts,out_file)
+        elif iChoice > 0:
+            print(str(accounts[iChoice-1]))
+            choice = input('Do you want to edit? (N/y)')
+            if choice in 'yY':
+                accountToEdit = copy(accounts[iChoice-1])
+                if edit_account(accountToEdit):
+                    accounts[iChoice-1] = accountToEdit
+                    out_file = open_encrypt(file_name,password)
+                    save_accounts(accounts,out_file)
+                
+            # TODO: aggiungere possibilità di modificare il record
+        else:
+            break
+    print("Bye!")
+
 #    print(accounts)
-#    out_file = open_encrypt('archive.protected2',password)
-#    save_accounts(accounts,out_file)
 #    print(list(accounts))
 #    print(dbData);
 
