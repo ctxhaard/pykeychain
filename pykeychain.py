@@ -16,11 +16,12 @@
 This module is a simple custom keychain manager
 Test Password is:"test_password"
 """
-
 import os
 from account import load_accounts, save_accounts, Account
 from copy import copy
 from getpass import getpass
+
+SEP = '-' * 10
 
 def open_decrypt(file_name,password):
     """
@@ -38,10 +39,12 @@ def open_encrypt(file_name,password):
 
 def edit_account(account):
     result = False
-    print(1,'Title:',account.title)
-    print(2,'URL:',account.URL)
-    print(3,'Username:',account.username)
-    print(4,'Password:',account.password)
+#     print('-' * 10)
+#     print(1,'Title:',account.title)
+#     print(2,'URL:',account.URL)
+#     print(3,'Username:',account.username)
+#     print(4,'Password:',account.password)
+#     print('-' * 10)
     while True:
         choice = input("Select index ('s:save C:cancel'): ")
         if choice == '1':
@@ -56,12 +59,15 @@ def edit_account(account):
         elif choice == '4':
             account.password = getpass('Password: ')
             result = True
+        elif choice == '5':
+            account.note = input('Notes: ')
+            result = True
         elif choice == 's':
             break
         else:
             result = False
             break
-    return result # in teoria non do
+    return result # in teoria non dovrebbe mai arrivare qui
 
 # Per avere un qualcosa su cui salvare...
 def main():
@@ -69,8 +75,10 @@ def main():
     password = getpass('Insert your password: ')
     in_file= open_decrypt(file_name,password)
     accounts = list(load_accounts(in_file))
+    print(SEP)
     for (i,account) in enumerate(accounts):
         print(i+1,account.title)
+    print(SEP)
     while True:
         choice = input('Select an account by index (0 for add new): ')
         try:
@@ -87,12 +95,19 @@ def main():
                 out_file = open_encrypt(file_name,password)
                 save_accounts(accounts,out_file)
         elif iChoice > 0:
+            print(SEP)
             print(str(accounts[iChoice-1]))
-            choice = input('Do you want to edit? (N/y)')
-            if choice in 'yY':
+            print(SEP)
+            choice = input('[E]dit, [Delete] or cancel')
+            if choice in 'eE':
                 accountToEdit = copy(accounts[iChoice-1])
                 if edit_account(accountToEdit):
                     accounts[iChoice-1] = accountToEdit
+                    out_file = open_encrypt(file_name,password)
+                    save_accounts(accounts,out_file)
+            elif choice in 'dD':
+                if input('Confirm (y or n)?') in 'yY':
+                    del accounts[iChoice-1]
                     out_file = open_encrypt(file_name,password)
                     save_accounts(accounts,out_file)
                 

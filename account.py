@@ -28,11 +28,11 @@ n: %s
         
     
     def __str__(self):
-        result = """Title: %s
-URL: %s
-Username: %s
-Password: %s
-Note: %s""" % (self.title,self.URL,self.username,self.password,self.note)
+        result = """1 Title: %s
+2 URL: %s
+3 Username: %s
+4 Password: %s
+5 Note: %s""" % (self.title,self.URL,self.username,self.password,self.note)
         if None != self.others:
             result = result + '\nOthers: %s' % self.others
         return result
