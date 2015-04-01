@@ -17,6 +17,8 @@ This module is a simple custom keychain manager
 Test Password is:"test_password"
 """
 import os
+import shutil
+from datetime import datetime
 from account import load_accounts, save_accounts, Account
 from copy import copy
 from getpass import getpass
@@ -69,24 +71,37 @@ def edit_account(account):
             break
     return result # in teoria non dovrebbe mai arrivare qui
 
+def print_accounts(accounts):
+    print(SEP)
+    for (i,account) in enumerate(accounts):
+        print(i+1,account.title)
+    print(SEP)
+    
+def print_account(account):
+    print(SEP)
+    print(str(account))
+    print(SEP)
+    
+def bkp_filename(file_name):
+    strDate = datetime.now().strftime('%Y%m%d%H%M%S')
+    result = file_name + '_' + strDate + '.bkp'
+    return result
+
 # Per avere un qualcosa su cui salvare...
 def main():
     file_name = 'archive.protected'
     password = getpass('Insert your password: ')
     in_file= open_decrypt(file_name,password)
     accounts = list(load_accounts(in_file))
-    print(SEP)
-    for (i,account) in enumerate(accounts):
-        print(i+1,account.title)
-    print(SEP)
+    print_accounts(accounts)
     while True:
-        choice = input('Select an account by index (0 for add new): ')
+        choice = input('Select an account by index (1-%i 0:add new [Q]uit): ' % len(accounts))
         try:
             iChoice = int(choice)
             print('You selected: ',iChoice)
         except:
             iChoice = -1
-            print('You choosed to quit')
+#             print('You choosed to quit')
             
         if 0 == iChoice:
             newAccount = Account()
@@ -94,22 +109,26 @@ def main():
                 accounts.append(newAccount)    
                 out_file = open_encrypt(file_name,password)
                 save_accounts(accounts,out_file)
+                print_accounts(accounts)
+
         elif iChoice > 0:
-            print(SEP)
-            print(str(accounts[iChoice-1]))
-            print(SEP)
+            print_account(accounts[iChoice-1])
             choice = input('[E]dit, [Delete] or cancel')
             if choice in 'eE':
                 accountToEdit = copy(accounts[iChoice-1])
                 if edit_account(accountToEdit):
                     accounts[iChoice-1] = accountToEdit
+                    shutil.copy(file_name,bkp_filename(file_name))
                     out_file = open_encrypt(file_name,password)
                     save_accounts(accounts,out_file)
             elif choice in 'dD':
-                if input('Confirm (y or n)?') in 'yY':
+                accountToDelete = accounts[iChoice-1]
+                if input('Confirm to delete %s (y or n)?' % accountToDelete.title) in 'yY':
                     del accounts[iChoice-1]
+                    shutil.copy(file_name,bkp_filename(file_name))
                     out_file = open_encrypt(file_name,password)
                     save_accounts(accounts,out_file)
+                    print_accounts(accounts)
                 
             # TODO: aggiungere possibilità di modificare il record
         else:
