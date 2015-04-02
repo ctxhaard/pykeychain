@@ -3,6 +3,9 @@ Created on 29/mar/2015
 
 @author: ctomasin
 '''
+import os
+import shutil
+from datetime import datetime
 
 class Account:
     def __init__(self,t=None,url=None,u=None,p=None,n=None,**others):
@@ -37,6 +40,20 @@ n: %s
             result = result + '\nOthers: %s' % self.others
         return result
     
+def open_decrypt(file_name,password):
+    """
+    Decrypts the file with name 'file_name' and returns a file object
+    """
+    file = os.popen('openssl enc -d -aes-256-cbc -in %s -k %s' % (file_name,password),'r')
+    return file
+
+def open_encrypt(file_name,password):
+    """
+    Open a file to write encrypted data
+    """
+    file = os.popen('openssl enc -aes-256-cbc -salt -out %s -k %s' % (file_name,password),'w')
+    return file
+    
 def load_accounts(file):
     """
     Reads accounts from file
@@ -61,11 +78,21 @@ def load_accounts(file):
     if len(content.keys()):
         yield Account(**content)
 
-def save_accounts(accounts,file):
+def save_accounts(accounts,file_name,password):
     """
     Saves accounts to file
     """
+    shutil.copy(file_name,bkp_filename(file_name))
+    out_file = open_encrypt(file_name,password)
+
     for account in accounts:
         # print(account.title)
-        file.write(repr(account))
-    file.close()
+        out_file.write(repr(account))
+    out_file.close()
+    
+def bkp_filename(file_name):
+    strDate = datetime.now().strftime('%Y%m%d%H%M%S')
+    result = file_name + '_' + strDate + '.bkp'
+    return result
+
+    
