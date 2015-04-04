@@ -42,7 +42,7 @@ def main():
                     account.save_accounts(accounts,out_file)
                     account_term.print_accounts(accounts)
 
-            elif iChoice > 0:
+            elif iChoice in range(1,len(accounts)+1):
                 account_term.print_account(accounts[iChoice-1])
                 choice = input('[E]dit, [Delete] or cancel')
                 if choice in 'eE':

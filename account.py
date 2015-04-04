@@ -70,20 +70,25 @@ def load_accounts(file):
     Returns a generator object giving dictionaries with records
     """
     content = {}
-    # record: (url , www.cacca.it)
+    key = None
+    # linea tipica:url: www.cacca.it
     for line in file:
         # print(type(line)) => <class 'str'>
         record = line.split(':')
-        if len(record) == 0: continue
         # record: (url,www.cacca.it)
         record = list(map(str.strip,record))
-        if len(record[0]) == 0:
+
+        if len(record) == 1:
+            if record[0][:1] == '-':
+                # separatore di record
+                if(len(content.keys())):
+                    yield Account(**content)
+                    content = {}
+            elif key != None:
+                # campi composti da più righe
+                content[key] = '\n\t'.join((content[key],record[0]))
             continue
-        elif record[0][:1] == '-':
-            if(len(content.keys())):
-                yield Account(**content)
-                content = {}
-        elif len(record) >= 2:
+        else:
             key, *value = record
             content[key] = ':'.join(value)
     if len(content.keys()):
