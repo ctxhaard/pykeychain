@@ -16,7 +16,7 @@ def edit_account(account):
 #     print(4,'Password:',account.password)
 #     print('-' * 10)
     while True:
-        choice = input("Select index ('s:save C:cancel'): ")
+        choice = input("Select a field by index ('s:save C:cancel'): ")
         if choice == '1':
             account.title = input('Title: ')
             result = True

@@ -7,6 +7,7 @@ import os
 import shutil
 from datetime import datetime
 import sys
+import re
 
 class Account:
     def __init__(self,t=None,url=None,u=None,p=None,n=None,**others):
@@ -42,8 +43,12 @@ n: %s
         return result
 
     def matches(self,keyword):
-        # TODO implementare
-        return True
+        attributes = dir(self)
+        for attr in attributes:
+            value = getattr(self,attr)
+            if isinstance(value,str) and re.search(keyword,value,flags=re.IGNORECASE):
+                return True
+        return False
     
 def open_decrypt(file_name,password):
     """
