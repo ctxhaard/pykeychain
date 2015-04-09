@@ -24,9 +24,11 @@ def main():
     accounts = list(account.load_accounts(in_file))
     account_term.print_accounts(accounts)
     while True:
-        choice = input('Select an account by index (1-%i 0:add new [Q]uit): ' % len(accounts))
+        choice = input('Select an account by keyword or by index (1-%i 0:add new [Q]uit): ' % len(accounts))
         if choice in 'qQ':
             break
+        elif len(choice) == 0:
+            account_term.print_accounts(accounts)
         else:
             try:
                iChoice = int(choice)
@@ -38,14 +40,15 @@ def main():
                 newAccount = account.Account()
                 if account_term.edit_account(newAccount):
                     accounts.append(newAccount)    
-                    out_file = account.open_encrypt(file_name,password)
-                    account.save_accounts(accounts,out_file)
+                    account.save_accounts(accounts,file_name,password)
                     account_term.print_accounts(accounts)
 
             elif iChoice in range(1,len(accounts)+1):
                 account_term.print_account(accounts[iChoice-1])
-                choice = input('[E]dit, [Delete] or cancel')
-                if choice in 'eE':
+                choice = input('[e]dit, [d]elete] or [C]ancel? ')
+                if len(choice) == 0:
+                    break
+                elif choice in 'eE':
                     accountToEdit = copy.copy(accounts[iChoice-1])
                     if account_term.edit_account(accountToEdit):
                         accounts[iChoice-1] = accountToEdit
