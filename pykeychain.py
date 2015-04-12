@@ -62,7 +62,7 @@ def main():
                     
             else:
                 matching_indexes = account.indexes_of_accounts_matching(accounts,choice)
-                account_term.print_accounts(accounts,filter=matching_indexes)
+                account_term.print_accounts(accounts,filterList=matching_indexes)
 
     print("Bye!")
 

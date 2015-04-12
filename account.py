@@ -6,7 +6,6 @@ Created on 29/mar/2015
 import os
 import shutil
 from datetime import datetime
-import sys
 import re
 
 class Account:
@@ -19,25 +18,24 @@ class Account:
         self.others = ((others.keys() and others) or None)
     
     def __repr__(self):
-        result = """---
-t: %s
-url: %s
-u: %s
-p: %s
-n: %s
-""" % (self.title,self.URL,self.username,self.password,self.note)
-        if None != self.others:
+        result = '---\n'
+        if self.title: result += 't: %s\n' % self.title
+        if self.URL: result += 'url: %s\n' % self.URL
+        if self.username: result += 'u: %s\n' % self.username
+        if self.password: result += 'p: %s\n' % self.password
+        if self.note: result += 'n: %s\n' % self.note
+        if self.others:
             rows = [': '.join((key,self.others[key])) for key in self.others]
             result += '\n'.join(rows)
+            result += '\n';
         return result
-        
-    
+
     def __str__(self):
-        result = """1 Title: %s
-2 URL: %s
-3 Username: %s
-4 Password: %s
-5 Note: %s""" % (self.title,self.URL,self.username,self.password,self.note)
+        result = """Title: %s
+URL: %s
+Username: %s
+Password: %s
+Note: %s""" % (self.title,self.URL,self.username,self.password,self.note)
         if None != self.others:
             result = result + '\nOthers: %s' % self.others
         return result

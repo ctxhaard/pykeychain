@@ -3,8 +3,6 @@ Created on 02/apr/2015
 
 @author: ctomasin
 '''
-from getpass import getpass
-
 SEP = '-' * 10
 
 def edit_account(account):
@@ -37,14 +35,14 @@ def edit_account(account):
         result =  (input("[s]ave or [C]ancel')? ") in 'sS')
     return result
 
-def print_accounts(accounts,filter=None):
+def print_accounts(accounts,filterList=None):
     """
     Prints a list of account titles filtere using a list of indexes.
     If filer is None all account titles are printed
     """
     print(SEP)
     for (i,account) in enumerate(accounts):
-        if filter == None or i in filter:
+        if filterList == None or i in filterList:
             print(i+1,account.title)
     print(SEP)
     
