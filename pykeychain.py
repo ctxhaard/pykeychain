@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*
 
 # TODO:
-# - ricerca per parola chiave (espressione regolare)
-# - stampare la lista su più colonne
 # - possibilità di cambiare la password
 # - possibilità di rivedere la lista
 
