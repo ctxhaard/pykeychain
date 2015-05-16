@@ -70,7 +70,7 @@ def edit_account(account):
 def main(stdscr):
     stdscr.clear()
     global _cmdwin
-    _cmdwin = curses.newwin(1,curses.COLS,curses.LINES-1,0)
+    _cmdwin = curses.newwin(2,curses.COLS,curses.LINES-2,0)
     _cmdwin.addstr('Insert your password:',curses.A_STANDOUT)
 
     _cmdwin.refresh()
