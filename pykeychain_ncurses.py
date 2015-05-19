@@ -24,7 +24,7 @@ def print_accounts(accounts,filterList=None):
 
 def print_account(account):
     global _accountwin
-    _accountwin = curses.newwin(10,50,5,5)
+    _accountwin = curses.newwin(10,curses.COLS-16,5,5)
     _accountwin.addstr(1,0,' Title: ')
     account.title and _accountwin.addstr(account.title)
     _accountwin.addstr(2,0,' URL: ')
