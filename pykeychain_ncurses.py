@@ -7,7 +7,7 @@ import copy
 
 def prompt(text):
         _cmdwin.clear()
-        _cmdwin.addstr(text)
+        _cmdwin.addstr(text.replace('\n',','))
         _cmdwin.refresh()
         return _cmdwin.getstr().decode()
 
