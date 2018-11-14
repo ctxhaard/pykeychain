@@ -52,14 +52,14 @@ def open_decrypt(file_name,password):
     """
     Decrypts the file with name 'file_name' and returns a file object
     """
-    file = os.popen('openssl enc -d -aes-256-cbc -in %s -k %s' % (file_name,password),'r')
+    file = os.popen('openssl enc -d -aes-256-cbc -md sha256 -in %s -k %s' % (file_name,password),'r')
     return file
 
 def open_encrypt(file_name,password):
     """
     Open a file to write encrypted data
     """
-    file = os.popen('openssl enc -aes-256-cbc -salt -out %s -k %s' % (file_name,password),'w')
+    file = os.popen('openssl enc -aes-256-cbc -md sha256 -salt -out %s -k %s' % (file_name,password),'w')
     return file
     
 def load_accounts(file):
