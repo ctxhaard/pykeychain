@@ -1,4 +1,5 @@
 #!/bin/sh
 
 export PYTHONIOENCODING=utf-8
-./pykeychain.py
+python3 ./pykeychain.py
+
