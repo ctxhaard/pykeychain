@@ -96,7 +96,7 @@ def save_accounts(accounts,file_name,password):
     """
     Saves accounts to file
     """
-    shutil.copy(file_name,bkp_filename(file_name))
+    shutil.copyfile(file_name,bkp_filename(file_name))
     out_file = open_encrypt(file_name,password)
 
     for account in accounts:
